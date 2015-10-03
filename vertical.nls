@@ -1,0 +1,29 @@
+to-report vertical [range iRate rRate]
+  ;; turtle procedure
+  ;; assumes: agent list variable named "traits"
+  ;; assumes: turtle breed named "agent/agents"
+  ;; range: integer; range of possible trait values
+  ;; iRate: float; innovation rate
+  ;; rRate: float; reproduction rate
+  ;; 
+  ;; description: transmission of information to offspring with chance of innovation or copying error. Returns number of offspring agent
+  
+  let ID 0
+  let offspring nobody
+
+  if random-float 1 <= rRate [ ;; check to see if agent can reproduce
+    ;type "self: " show self
+    hatch 1 [ ;; clone agent (has same traits initially)
+      if random-float 1 <= iRate  [ ;; check to see if there is an innovation/copying error
+        set traits replace-item (random length traits) traits (random range) ;; assign a random value to trait 
+        ] 
+      set offspring self
+      set ID [who] of offspring    
+      ]
+      
+      ask one-of other agents with [who != agent ID] [die] ;; another agent dies to keep population stable
+    ]
+  
+
+  report offspring ;; newly hatched agent
+end

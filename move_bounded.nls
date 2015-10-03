@@ -1,0 +1,9 @@
+to move-bounded [dist]
+  ;; turtle procedure
+  ;; dist: integer or float; distance turtle moves in east step
+  ;; description: simple movement routine for bounded world
+  
+  rt random 360
+  if patch-ahead moveDistance = nobody [ rt random 360 lt random 360] ;; avoids boundaries of gridded landscape
+  fd dist
+end

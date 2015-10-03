@@ -1,0 +1,25 @@
+to unbiased [range radius iRate]
+  ;; turtle procedure
+  ;; assumes: agent list variable named "traits"
+  ;; assumes: turtle breed named "agent/agents"
+  ;; range: integer; range of possible trait values
+  ;; radius: integer; distance from calling agent
+  ;; iRate: float; innovation rate
+  ;; 
+  ;; description: horizontal transmission of information between two agents who encounter each other 
+  ;;   within an area defined by "radius" (set by user) when moving in gridded landscape, 
+  ;;   with chance of innovation or copying error
+  
+  let place random length traits ;; randomly choose trait to change
+  
+  let partner one-of other agents in-radius radius ;; randomly select an agent within "interactionRadius" to copy from
+  if partner != nobody [ ;; check to see if a partner for copying has been identified
+    set traits replace-item place traits [item place traits] of partner ;; learn new information copied from partner
+    ]
+  
+  if random-float 1 <= iRate  [ ;; check to see if there is an innovation/copying error
+    set traits replace-item place traits (random range) ;; assign a random value to trait 
+    ] 
+  
+end
+

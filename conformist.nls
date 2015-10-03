@@ -1,0 +1,40 @@
+to conformist [range radius iRate]
+  ;; turtle procedure
+  ;; assumes: agent list variable named "traits"
+  ;; assumes: turtle breed named "agent/agents"
+  ;; range: integer; range of possible trait values
+  ;; radius: integer; distance from calling agent
+  ;; iRate: float; innovation rate
+  ;; 
+  ;; description: horizontal transmission of information where the trait value copied is the most common one of other agents 
+  ;;   within an area defined by "radius" when moving in gridded landscape, with chance of innovation or copying error.
+  ;;   For best results, radius should be set to a value > 1. But results may vary as radius changes
+
+  let place random length traits ;; randomly choose trait to change
+  let mostPopular [] ;; list of the most popular trait values (can contain more than one entry if there are ties)
+  let index 0 ;; position in popularity list, indicating trait value
+  let partners other agents in-radius radius ;; all other agents within radius
+
+  if partners != nobody [ ;; check to be sure that there are partners to copy from
+    let popularity [] ;; list to hold numbers of agents with each value for the trait selected
+    foreach n-values range [?]  [ 
+      ;; generate popularity list such that the position in the list indicates the trait value 
+      ;;   and the value of the list item the number of neighboring agents with that trait value
+      set popularity lput (count partners with [item place traits = ?]) popularity ;; add agent count to popularity list
+      ]
+    
+    foreach popularity [
+      if ? = max popularity [
+        set mostPopular lput index mostPopular ;; add trait value to list of most popular trait values
+        ]
+      set index index + 1 ;; increment popularity list position counter
+      ]
+    set traits replace-item place traits one-of mostPopular
+    ]
+  
+  if random-float 1 <= iRate  [ ;; check to see if there is an innovation/copying error
+    set traits replace-item place traits (random range) ;; assign a random value to trait 
+  ] 
+  
+end
+

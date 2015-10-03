@@ -1,0 +1,19 @@
+to-report simpson-diversity
+  ;; observer procedure
+  ;; assumes: agent list variable named "traits"
+  ;; assumes: turtle breed named "agent/agents"
+  ;; 
+  ;; description: calculates and reports Simpson Diversity Index for traits of all agents 
+  
+  let divSum 0
+  let index 0
+  let tList remove-duplicates [traits] of agents ; create list of trait configurations 
+  
+  ; Simpson Index
+  foreach tList [
+    set divSum divSum + (count agents with [traits = ?] / count agents) ^ 2
+    ]
+  set index 1 - divSum
+  
+  report index
+end

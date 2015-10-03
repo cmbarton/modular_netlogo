@@ -1,0 +1,29 @@
+to prestige [range radius iRate prestigePlace]
+  ;; turtle procedure
+  ;; assumes: agent list variable named "traits"
+  ;; assumes: turtle breed named "agent/agents"
+  ;; range: integer; range of possible trait values
+  ;; radius: integer; distance from calling agent
+  ;; iRate: float; innovation rate
+  ;; prestigePlace: integer; index of item in traits list that represents prestige (larger value for this item is greater prestige)
+  ;; 
+  ;; description: horizontal transmission of information between two agents who encounter each other 
+  ;;   within an area defined by "radius" when moving in gridded landscape, 
+  ;;   with chance of innovation or copying error (determined by "iRate"), with chance of innovation or copying error. 
+  ;;   Probability of copying from another agent determined by value of item "prestigePlace" of "traits" list.
+
+  let place random length traits ;; randomly choose trait to change (this may or may not be the trait conferring prestige).
+  let partner one-of other agents in-radius radius ;; randomly select an agent within radius to copy from
+
+  if partner != nobody [ ;; check to see if a partner for copying has been identified
+    let prestigeValue [item prestigePlace traits] of partner ;; evaluate prestige of partner at prestigePlace location in traits list
+    if random-float 1 <= (prestigeValue + 1) / range [ ;; prestige of partner determins probability that value will be copied
+      set traits replace-item place traits [item place traits] of partner ;; learn new information copied from partner
+    ]
+  ]
+  
+  if random-float 1 <= iRate  [ ;; check to see if there is an innovation/copying error
+    set traits replace-item place traits (random range) ;; assign a random value to trait 
+  ] 
+
+end
